@@ -242,8 +242,7 @@ class _LanguagePageState extends State<LanguagePage> {
     super.initState();
     flutterTts = FlutterTts();
     speech = stt.SpeechToText();
-    //_requestMicrophonePermission();
-    _checkLocationPermission();
+    _requestMicrophonePermission();
   }
 
   @override
@@ -252,42 +251,6 @@ class _LanguagePageState extends State<LanguagePage> {
     speech.stop();
     Get.delete<LanguagePageController>();
     super.dispose();
-  }
-
-  // Check location permission status
-  Future<void> _checkLocationPermission() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        print("Location permission denied");
-        _requestMicrophonePermission();
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-        print("Location permissions are permanently denied");
-        _requestMicrophonePermission();
-      return;
-    }
-
-    _getCurrentLocation();
-  }
-
-  // Get the current location
-  Future<void> _getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
-      _requestMicrophonePermission();
-    } catch (e) {
-      print("Error: $e");
-      _requestMicrophonePermission();
-    }
   }
 
   Future<void> _requestMicrophonePermission() async {

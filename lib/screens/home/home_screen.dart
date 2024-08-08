@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
@@ -43,6 +44,45 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
     homeController.update();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLocationPermission();
+  }
+
+  // Check location permission status
+  Future<void> _checkLocationPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print("Location permission denied");
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      print("Location permissions are permanently denied");
+      return;
+    }
+
+    _getCurrentLocation();
+  }
+
+
+  // Get the current location
+  Future<void> _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   @override

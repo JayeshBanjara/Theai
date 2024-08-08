@@ -87,7 +87,7 @@ class _MuseumScreenState extends State<MuseumScreen> {
                 SpeedDialChild(
                     child:Semantics(
                         label: 'button collections',
-                        child: SvgPicture.asset(ImageConstants.icNavigate)),
+                        child: SvgPicture.asset(ImageConstants.icNavigate,color: AppColors.lightGreyColor,)),
                     backgroundColor: AppColors.blackColor,
                     shape: const CircleBorder(),
                     onTap: () {
